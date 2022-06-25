@@ -38,7 +38,7 @@ const createAuthor = async function (req, res) {
         .send({ status: false, message: "title is required" });
     }
     if (!isValid(email)) {
-      return req
+      return res
         .status(400)
         .send({ status: false, message: "email is required" });
     }
@@ -49,20 +49,20 @@ const createAuthor = async function (req, res) {
       if (!fname.match(nameRegex))
         return res.status(400).send({
           status: false,
-          msg: "first name should have alphabets ",
+          msg: "first name should have alphabets only",
         });
       if (!lname.match(nameRegex))
         return res
           .status(400)
           .send({
             status: false,
-            msg: "last name should have only alphabets",
+            msg: "last name should have alphabets only",
           });
       if (!email.match(emailRegex))
         return res
           .status(400)
           .send({ status: false, msg: "Email is not legit" });
-    const emailInUse = await authorModel.findOne({ email: data.email })
+    const emailInUse = await authorModel.findOne({ email: email })
     if (emailInUse) {
       return res.status(400).send({status:false, message: "email entered is already in use" })
     }
@@ -88,7 +88,7 @@ const login = async function (req, res) {
     let { email, password } = data;
     
     if (!isValid(email)) {
-      return req
+      return res
         .status(400)
         .send({
           status: false,
