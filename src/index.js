@@ -10,7 +10,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const mongoose = require("mongoose");
 mongoose
-  .connect("mongodb+srv://sumitkm:sumitkm@cluster0.p327p7w.mongodb.net/project1bloggroup18")
+  .connect(
+    "mongodb+srv://functionupassignment:msJISmjxvX4gvZ9W@functionup.nyvlz.mongodb.net/blogproject"
+  )
   .then(() => console.log("mongodb is connected"))
   .catch((err) => console.log(err));
 

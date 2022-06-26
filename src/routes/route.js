@@ -19,7 +19,7 @@ router.delete(
 );
 router.delete(
   "/blogs",MWController.authenticate,
-  BlogController.deleteBlogByParams
+  BlogController.deleteBlogByQuery
 );
 
 router.post('/login',AuthorController.login)

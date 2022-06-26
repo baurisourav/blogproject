@@ -15,7 +15,7 @@ const blogSchema = new mongoose.Schema(
     },
     authorId: {
       type: ObjectId,
-      ref: 'Author',
+      ref: 'Newauthor',
      required: true,
     },
     tags: [{
@@ -50,5 +50,5 @@ const blogSchema = new mongoose.Schema(
   },
   { timestand: true }
 );
-module.exports = mongoose.model("Blog", blogSchema);
+module.exports = mongoose.model("Newblog", blogSchema);
  

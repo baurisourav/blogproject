@@ -43,7 +43,7 @@ const createBlog = async function (req, res) {
         .send({ status: false, msg: "authorId is required" });
     }
     if (authorId != req.decodedToken.authorId) {
-      return res.status(400).send({status:false, msg:"not authorized"})
+      return res.status(403).send({status:false, msg:"not authorized"})
     }
     if (!check(tags)) {
       return res.status(400).send({ status: false, msg: "tags are required" });
@@ -86,9 +86,9 @@ const getBlogs = async function (req, res) {
       if (!isValidObjectId(authorId)) {
         return res.status(400).send({status:false,msg:"enter valid author id"})
       }
-      if (authorId != req.decodedToken.authorId) {
-        return res.status(400).send({status:false, msg:"not authorized"})
-      }
+      // if (authorId != req.decodedToken.authorId) {
+      //   return res.status(403).send({status:false, msg:"not authorized"})
+      // }
     }
 
     
@@ -130,7 +130,7 @@ const updateBlogs = async function (req, res) {
       return res.status(404).send({ status: false, msg: "no blogs found" });
     }
     if (blogs.authorId != req.decodedToken.authorId) {
-      return res.status(400).send({ status: false, msg: "not authorized" });
+      return res.status(403).send({ status: false, msg: "not authorized" });
     }
     let updatedData = { publishedAt: new Date(), isPublished: true };
     if (data.title) {
@@ -197,7 +197,7 @@ const deleteBlogById = async function (req, res) {
     //   return res.status(404).send({ status: false, msg: "Blog is already deleted " });
     // }
     if (blog.authorId != req.decodedToken.authorId) {
-      return res.status(400).send({ status: false, msg: "not authorized" });
+      return res.status(403).send({ status: false, msg: "not authorized" });
     }
 
     let afterDelete = await blogModel.findOneAndUpdate(
@@ -211,21 +211,18 @@ const deleteBlogById = async function (req, res) {
   }
 };
 
-const deleteBlogByParams = async function (req, res) {
+const deleteBlogByQuery = async function (req, res) {
   try {
     let body = req.query; //check req.query has element or not
     if (!body) {
       // 404 not found, 404, 404 error, page not found or   not found error
-      return res
-        .status(404)
-        .send({
-          status: false,
-          msg: "No such blog exists or the blog is deleted",
-        });
+      return res.status(404).send({
+        status: false,
+        msg: "No such blog exists or the blog is deleted",
+      });
     }
 
     let { category, authorId, tags, subcategory, isPublished } = body; // take all the element in the body container
-    
 
     if (category) {
       if (!isValid(category))
@@ -236,18 +233,20 @@ const deleteBlogByParams = async function (req, res) {
 
     if (authorId) {
       if (!isValidObjectId(authorId)) {
-         return res
-           .status(400)
-           .send({ status: false, msg: "No such author found" });
+        return res
+          .status(400)
+          .send({ status: false, msg: "No such author found" });
       }
-       if (authorId != req.decodedToken.authorId) {
-         return res.status(400).send({ status: false, msg: "not authorized" });
-       }
+      if (authorId != req.decodedToken.authorId) {
+        return res.status(400).send({ status: false, msg: "not authorized" });
+      }
     }
 
     if (tags) {
       if (!check(tags))
-        return res.status(400).send({ status: false, msg: "No such tag found" });
+        return res
+          .status(400)
+          .send({ status: false, msg: "No such tag found" });
     }
 
     if (subcategory) {
@@ -272,6 +271,7 @@ const deleteBlogByParams = async function (req, res) {
       { new: true }
     );
     return res.status(200).send({ status: true, body: deleteBlog });
+    
   } catch (err) {
     res.status(500).send({ msg: "error", error: err.message });
   }
@@ -281,4 +281,4 @@ module.exports.getBlogs = getBlogs;
 module.exports.updateBlogs = updateBlogs;
 module.exports.createBlog = createBlog;
 module.exports.deleteBlogById = deleteBlogById;
-module.exports.deleteBlogByParams = deleteBlogByParams;
+module.exports.deleteBlogByQuery = deleteBlogByQuery;
