@@ -2,6 +2,9 @@
 
 Repository for backend cohort - Radon
 
+![Alt](https://repobeats.axiom.co/api/embed/617711176bcfa0eb35f8ae319e379a00972caf21.svg "Repobeats analytics image")
+
+
 ## Blogging Site Mini Project Requirement
 
 ## Phase I
